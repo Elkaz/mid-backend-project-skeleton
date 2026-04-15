@@ -1,4 +1,4 @@
--- Implement and test basic SQL queries:
+-- Implement and test basic SQL queries
 SELECT * FROM events;
 
 SELECT * FROM events
