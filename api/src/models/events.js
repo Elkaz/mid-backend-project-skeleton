@@ -92,7 +92,7 @@ export async function listEvents(filters = {}, options = {}) {
 
   const qb = baseQuery(trx).select("*");
 
-  // apply filters
+  applyFilters(qb, filters);
 
   qb.orderBy(orderBy, String(order).toLowerCase() === "desc" ? "desc" : "asc");
 
