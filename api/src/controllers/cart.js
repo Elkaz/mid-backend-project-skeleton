@@ -13,29 +13,36 @@ export async function getCart(req, res) {
       .first();
 
     if (!cart) {
-      [cart] = await knex("cart")
+      const insertedRows = await knex("cart")
         .insert({ user_id: userId, status: "active" })
         .returning("*");
+
+      cart = Array.isArray(insertedRows) ? insertedRows[0] : insertedRows;
     }
 
     const items = await knex("cart_item")
-      .where({ cart_id: cart.id })
+      .where({ "cart_item.cart_id": cart.id })
       .join("event", "cart_item.event_id", "event.id")
       .select(
         "cart_item.id",
+        "cart_item.event_id",
         "cart_item.quantity",
         "event.title",
         "event.price",
         "event.currency",
       );
 
-    res.json({ cart, items });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to get cart" });
+    return res.status(200).json({
+      id: cart.id,
+      user_id: cart.user_id,
+      status: cart.status,
+      items,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to get cart" });
   }
 }
 
-// POST /api/cart/items
 export async function addItem(req, res) {
   try {
     if (!req.user?.id) {
@@ -43,18 +50,26 @@ export async function addItem(req, res) {
     }
 
     const userId = req.user.id;
-    const { event_id, quantity = 1 } = req.body;
+    const { eventId, quantity = 1 } = req.body;
 
-    if (!Number.isInteger(event_id)) {
-      return res
-        .status(400)
-        .json({ error: "event_id must be a valid integer" });
+    if (!Number.isInteger(eventId)) {
+      return res.status(400).json({
+        error: "eventId must be a valid integer",
+      });
     }
 
     if (!Number.isInteger(quantity) || quantity <= 0) {
-      return res
-        .status(400)
-        .json({ error: "quantity must be a positive integer" });
+      return res.status(400).json({
+        error: "quantity must be a positive integer",
+      });
+    }
+
+    const event = await knex("event").where({ id: eventId }).first();
+
+    if (!event) {
+      return res.status(404).json({
+        error: "Event not found",
+      });
     }
 
     let cart = await knex("cart")
@@ -62,38 +77,43 @@ export async function addItem(req, res) {
       .first();
 
     if (!cart) {
-      [cart] = await knex("cart")
+      const insertedRows = await knex("cart")
         .insert({ user_id: userId, status: "active" })
         .returning("*");
+
+      cart = Array.isArray(insertedRows) ? insertedRows[0] : insertedRows;
     }
 
-    const existing = await knex("cart_item")
-      .where({ cart_id: cart.id, event_id })
+    const existingItem = await knex("cart_item")
+      .where({ cart_id: cart.id, event_id: eventId })
       .first();
 
-    if (existing) {
+    if (existingItem) {
       await knex("cart_item")
-        .where({ id: existing.id, cart_id: cart.id })
+        .where({ id: existingItem.id, cart_id: cart.id })
         .update({
-          quantity: existing.quantity + quantity,
+          quantity: existingItem.quantity + quantity,
         });
 
-      return res.json({ message: "Quantity updated" });
+      return res.status(200).json({
+        message: "Quantity updated",
+      });
     }
 
     await knex("cart_item").insert({
       cart_id: cart.id,
-      event_id,
+      event_id: eventId,
       quantity,
     });
 
-    return res.status(201).json({ message: "Item added" });
-  } catch (err) {
+    return res.status(201).json({
+      message: "Item added",
+    });
+  } catch (error) {
     return res.status(500).json({ error: "Failed to add item" });
   }
 }
 
-// PUT /api/cart/items/:itemId
 export async function updateItem(req, res) {
   try {
     if (!req.user?.id) {
@@ -101,11 +121,19 @@ export async function updateItem(req, res) {
     }
 
     const userId = req.user.id;
-    const { itemId } = req.params;
+    const itemId = Number(req.params.itemId);
     const { quantity } = req.body;
 
+    if (!Number.isInteger(itemId) || itemId <= 0) {
+      return res.status(400).json({
+        error: "itemId must be a valid positive integer",
+      });
+    }
+
     if (quantity === undefined) {
-      return res.status(400).json({ error: "quantity is required" });
+      return res.status(400).json({
+        error: "quantity is required",
+      });
     }
 
     const parsedQuantity = Number(quantity);
@@ -124,28 +152,30 @@ export async function updateItem(req, res) {
       return res.status(404).json({ error: "Cart not found" });
     }
 
-    if (parsedQuantity === 0) {
-      const deleted = await knex("cart_item")
-        .where({ id: itemId, cart_id: cart.id })
-        .del();
-
-      if (!deleted) {
-        return res.status(404).json({ error: "Item not found" });
-      }
-
-      return res.json({ message: "Item removed" });
-    }
-
-    const updated = await knex("cart_item")
+    const existingItem = await knex("cart_item")
       .where({ id: itemId, cart_id: cart.id })
-      .update({ quantity: parsedQuantity });
+      .first();
 
-    if (!updated) {
+    if (!existingItem) {
       return res.status(404).json({ error: "Item not found" });
     }
 
-    return res.json({ message: "Item updated" });
-  } catch (err) {
+    if (parsedQuantity === 0) {
+      await knex("cart_item").where({ id: itemId, cart_id: cart.id }).del();
+
+      return res.status(200).json({
+        message: "Item removed",
+      });
+    }
+
+    await knex("cart_item")
+      .where({ id: itemId, cart_id: cart.id })
+      .update({ quantity: parsedQuantity });
+
+    return res.status(200).json({
+      message: "Item updated",
+    });
+  } catch (error) {
     return res.status(500).json({ error: "Failed to update item" });
   }
 }
