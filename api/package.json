@@ -18,7 +18,9 @@
     "db:setup": "npm run db:migrate && npm run db:seed"
   },
   "dependencies": {
-    "body-parser": "^1.22.2",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "jsonwebtoken": "^9.0.2",
     "cors": "^2.8.5",
     "deepmerge": "^4.3.1",
     "dotenv": "^16.4.5",
