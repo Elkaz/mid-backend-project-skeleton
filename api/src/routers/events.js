@@ -40,9 +40,27 @@ const eventsRouter = express.Router();
  *           default: 0
  *         required: false
  *         description: Page number (zero-based)
+ *
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 20
+ *         required: false
+ *         description: Number of items per page
+ *
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Search events by title
+ *
  *     responses:
  *       200:
  *         description: Paginated list of events
+ *
  *         content:
  *           application/json:
  *             schema:

@@ -1,0 +1,59 @@
+{
+  "info": {
+    "name": "Week 3 - Public Events API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Public GET-only endpoints for events catalog"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "eventId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET /api/events (paginated + search)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/events?q=music&page=1&pageSize=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events"],
+          "query": [
+            {
+              "key": "q",
+              "value": "music"
+            },
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "pageSize",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "Returns paginated public events list using optional text search"
+      }
+    },
+    {
+      "name": "GET /api/events/:id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/events/{{eventId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "events", "{{eventId}}"]
+        },
+        "description": "Returns one event by id"
+      }
+    }
+  ]
+}
