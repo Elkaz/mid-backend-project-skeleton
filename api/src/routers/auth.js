@@ -40,7 +40,7 @@ const authRouter = express.Router();
  *                 example: secret123
  *     responses:
  *       201:
- *         description: Signup successful, returns user and token
+ *         description: Signup successful
  *       400:
  *         description: Missing required fields
  *       409:
