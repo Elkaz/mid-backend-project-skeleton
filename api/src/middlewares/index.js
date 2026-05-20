@@ -1,3 +1,3 @@
-const middlewares = []
+export const globalMiddlewares = [];
 
-export default middlewares
+export const terminalMiddlewares = [];
