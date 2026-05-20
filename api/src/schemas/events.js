@@ -13,8 +13,8 @@ import { z } from "zod";
  * - throws a ZodError when a type or condition is not met
  */
 export const EventListQuery = z.object({
-    page: z.coerce.number().int().min(0).default(0),
-    pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  page: z.coerce.number().int().min(0).default(0),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
 });
 
 /**
@@ -28,7 +28,7 @@ export const EventListQuery = z.object({
  * - throws a ZodError if the value cannot be parsed into a positive integer
  */
 export const EventIdParams = z.object({
-    id: z.coerce.number().int().positive("id must be a positive integer"),
+  id: z.coerce.number().int().positive("id must be a positive integer"),
 });
 
 /**
@@ -48,14 +48,14 @@ export const EventIdParams = z.object({
  * - throws a ZodError when a field is missing, has the wrong type, or fails a rule
  */
 export const EventInput = z.object({
-    title: z.string().trim().min(1, "title is required"),
-    price: z.coerce.number().min(0, "price must be a non-negative number"),
-    currency: z
-        .string()
-        .trim()
-        .toUpperCase()
-        .length(3, "currency must be a 3-letter code"),
-    description: z.string().trim().optional(),
+  title: z.string().trim().min(1, "title is required"),
+  price: z.coerce.number().min(0, "price must be a non-negative number"),
+  currency: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .length(3, "currency must be a 3-letter code"),
+  description: z.string().trim().optional(),
 });
 
 /**
