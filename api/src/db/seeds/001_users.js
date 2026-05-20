@@ -1,12 +1,25 @@
+import bcrypt from "bcrypt";
 
+/**
+ * @param {import("knex").Knex} knex
+ */
 export async function seed(knex) {
-  await knex("user").del();
+  await knex("app_user").del();
 
-  await knex("user").insert([
+  const hashedPassword = await bcrypt.hash("test1234", 10);
+
+  await knex("app_user").insert([
     {
       id: 1,
-      email: "test@example.com",
-      password_hash: "hashedpassword",
+      name: "Ryan Joon",
+      email: "Ryan@example.com",
+      password: hashedPassword,
+    },
+    {
+      id: 2,
+      name: "John John",
+      email: "john@example.com",
+      password: await bcrypt.hash("john1234", 10),
     },
   ]);
 }

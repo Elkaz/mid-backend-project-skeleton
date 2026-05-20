@@ -12,6 +12,8 @@ export async function up(knex) {
       .inTable("app_user")
       .onDelete("SET NULL");
 
+    table.string("guest_token").nullable().unique();
+
     table
       .enu("status", ["active", "ordered"])
       .notNullable()
