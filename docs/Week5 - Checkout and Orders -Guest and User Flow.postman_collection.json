@@ -1,0 +1,296 @@
+{
+  "info": {
+    "_postman_id": "ab1acc62-2405-4768-b382-9e10deffbe47",
+    "name": "Week 5 - Checkout and Orders -Guest and User Flow",
+    "description": "Postman collection for guest cart and authenticated checkout/orders flow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50885542",
+    "_collection_link": "https://go.postman.co/collection/50885542-ab1acc62-2405-4768-b382-9e10deffbe47?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Guest - Create Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/guest",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "guest"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Guest - Get Cart",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{guestToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Guest - Add Item",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{guestToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"eventId\": 1,\n  \"quantity\": 2\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/items",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "items"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Guest - Update Item",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{guestToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 3\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/items/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "items", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Guest - Delete Item",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{guestToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/items/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "items", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"Ryan@test.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Get Cart",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Add Item",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"eventId\": 1,\n  \"quantity\": 2\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/items",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "items"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Update Item",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 3\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/items/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "items", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Delete Item",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/items/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "items", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Checkout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/cart/checkout",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cart", "checkout"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Get Orders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "orders"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "User - Get Order By Id",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{userToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "orders", "1"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "guestToken",
+      "value": ""
+    },
+    {
+      "key": "userToken",
+      "value": ""
+    }
+  ]
+}
