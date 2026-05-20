@@ -31,10 +31,10 @@ const authRouter = express.Router();
  *             properties:
  *               name:
  *                 type: string
- *                 example: Jane Doe
+ *                 example: Ryan Joon
  *               email:
  *                 type: string
- *                 example: jane@example.com
+ *                 example: Ryan@example.com
  *               password:
  *                 type: string
  *                 example: secret123
@@ -67,13 +67,33 @@ authRouter.post("/signup", signup);
  *             properties:
  *               email:
  *                 type: string
- *                 example: jane@example.com
+ *                 example: Ryan@example.com
  *               password:
  *                 type: string
  *                 example: secret123
  *     responses:
  *       200:
- *         description: Login successful, returns token and user
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Login successful
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
  *       400:
  *         description: Missing required fields
  *       401:
